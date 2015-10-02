@@ -8,17 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.plus.PlusOneButton;
 
 /**
- * A fragment with a Google +1 button.
+ * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TestFragment.OnFragmentInteractionListener} interface
+ * {@link SecondFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TestFragment#newInstance} factory method to
+ * Use the {@link SecondFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TestFragment extends Fragment {
+public class SecondFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,14 +27,6 @@ public class TestFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    // The URL to +1.  Must be a valid URL.
-    private final String PLUS_ONE_URL = "http://developer.android.com";
-
-    // The request code must be 0 or greater.
-    private static final int PLUS_ONE_REQUEST_CODE = 0;
-
-    private PlusOneButton mPlusOneButton;
-
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -44,11 +35,11 @@ public class TestFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TestFragment.
+     * @return A new instance of fragment SecondFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TestFragment newInstance(String param1, String param2) {
-        TestFragment fragment = new TestFragment();
+    public static SecondFragment newInstance(String param1, String param2) {
+        SecondFragment fragment = new SecondFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -56,7 +47,7 @@ public class TestFragment extends Fragment {
         return fragment;
     }
 
-    public TestFragment() {
+    public SecondFragment() {
         // Required empty public constructor
     }
 
@@ -73,20 +64,7 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_test, container, false);
-
-        //Find the +1 button
-        mPlusOneButton = (PlusOneButton) view.findViewById(R.id.plus_one_button);
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        // Refresh the state of the +1 button each time the activity receives focus.
-        mPlusOneButton.initialize(PLUS_ONE_URL, PLUS_ONE_REQUEST_CODE);
+        return inflater.inflate(R.layout.fragment_second, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -22,7 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class MainMenuDrawer extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, TestFragment.OnFragmentInteractionListener ,MapFragment.OnFragmentInteractionListener{
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, SecondFragment.OnFragmentInteractionListener ,MapFragment.OnFragmentInteractionListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -61,7 +61,7 @@ public class MainMenuDrawer extends AppCompatActivity
                 // fragment1
                 // use fragment transaction and add the fragment to the container
 
-                 fragment = new TestFragment();
+                 fragment = new SecondFragment();
 
 
                 break;
