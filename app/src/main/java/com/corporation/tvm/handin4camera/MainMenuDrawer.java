@@ -1,6 +1,7 @@
 package com.corporation.tvm.handin4camera;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.provider.SyncStateContract;
 import android.support.v4.app.FragmentTransaction;
@@ -20,6 +21,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainMenuDrawer extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, SecondFragment.OnFragmentInteractionListener ,MapFragment.OnFragmentInteractionListener{
@@ -129,7 +131,13 @@ public class MainMenuDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.camera_button) {
+            Intent intent = new Intent(MainMenuDrawer.this, CameraActivity.class);
+            startActivity(intent);
+
+
+
+            Toast.makeText(MainMenuDrawer.this, "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }
 

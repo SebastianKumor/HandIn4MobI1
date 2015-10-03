@@ -1,5 +1,6 @@
 package com.corporation.tvm.handin4camera;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -251,6 +252,9 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.camera_button) {
+
+            Intent intent = new Intent(getActivity(), CameraActivity.class);
+            startActivity(intent);
             Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }
