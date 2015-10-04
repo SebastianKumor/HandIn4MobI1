@@ -5,14 +5,14 @@
     android:id="@+id/camera_activity_frame"
     tools:context="com.corporation.tvm.handin4camera.CameraActivity">
 
-    <com.corporation.tvm.handin4camera.CustomSurfaceView
+    <SurfaceView
         android:id="@+id/surf_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
 
 
-    </com.corporation.tvm.handin4camera.CustomSurfaceView>
+    </SurfaceView>
 
     <RelativeLayout
         android:id="@+id/rel_layout"
