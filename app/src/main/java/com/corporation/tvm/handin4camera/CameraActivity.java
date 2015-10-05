@@ -1,6 +1,7 @@
 package com.corporation.tvm.handin4camera;
 
 import android.app.Activity;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -49,8 +56,56 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         setCameraDisplayOrientation(CameraActivity.this, findFrontFacingCameraID(), mCamera);
         picButton = (Button) findViewById(R.id.camera_button);
 
-        // surfaceHolder.addCallback(CameraActivity.this);
+        picButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCamera.takePicture(null, null, mPicture);
+            }
+        });
 
+        //// Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
+        // thumbnail for the library in left botom corner
+
+    }
+
+
+    Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(byte[] data, Camera camera) {
+            File pictureFile = getOutputMediaFile();
+            if (pictureFile == null) {
+                return;
+            }
+            try {
+                FileOutputStream fos = new FileOutputStream(pictureFile);
+                fos.write(data);
+                fos.close();
+            } catch (FileNotFoundException e) {
+
+            } catch (IOException e) {
+            }
+        }
+    };
+
+    private static File getOutputMediaFile() {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyCameraApp");
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".jpg");
+
+        return mediaFile;
     }
 
 
@@ -193,87 +248,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
 
 
-//    public void refreshCamera() {
-//
-//        if (surfaceHolder.getSurface() == null) {
-//            // preview surface does not exist
-//            return;
-//        }
-//
-//        // stop preview before making changes
-//        try {
-//
-//            mCamera.stopPreview();
-//        } catch (Exception e) {
-//            // ignore: tried to stop a non-existent preview
-//        }
-//
-//        setCameraDisplayOrientation(CameraActivity.this, findFrontFacingCameraID(), mCamera);
-//        // set preview size and make any resize, rotate or
-//        // reformatting changes here
-//
-//        Camera.Parameters parameters = mCamera.getParameters();
-//        parameters.setPreviewSize(optimalSize.width, optimalSize.height);
-//        mCamera.setParameters(parameters);
-//        mCamera.startPreview();
-//        // start preview with new settings
-//
-//        try {
-//            mCamera.setPreviewDisplay(surfaceHolder);
-//            mCamera.startPreview();
-//        } catch (Exception e) {
-//
-//        }
-//    }
-//
-//
-//
-//    @Override
-//    public void surfaceChanged(SurfaceHolder holder, int format, int width,
-//                               int height) {
-//        refreshCamera();
-//
-//
-//    }
-//
-//    @Override
-//    public void surfaceCreated(SurfaceHolder holder) {
-//        // TODO Auto-generated method stub
-//
-//        try {
-//            // open the camera
-//            mCamera = Camera.open();
-//        } catch (RuntimeException e) {
-//
-//            // check for exceptions
-//            System.err.println(e);
-//            return;
-//        }
-//
-//        try {
-//            // The Surface has been created, now tell the camera where to draw
-//            // the preview.
-//            mCamera.setPreviewDisplay(surfaceHolder);
-//            mCamera.startPreview();
-//        } catch (Exception e) {
-//            // check for exceptions
-//            System.err.println(e);
-//            return;
-//        }
-//
-//
-//    }
-//
-//    @Override
-//    public void surfaceDestroyed(SurfaceHolder holder) {
-//        // TODO Auto-generated method stub
-//
-//        mCamera.stopPreview();
-//        mCamera.release();
-//
-//        mCamera = null;
-//
-//    }
 
 
 }
