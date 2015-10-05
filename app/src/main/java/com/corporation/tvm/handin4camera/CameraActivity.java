@@ -1,6 +1,11 @@
 package com.corporation.tvm.handin4camera;
 
-import android.app.Activity;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +16,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Button;
 import android.view.View;
-import android.widget.FrameLayout;
 
 
 import java.io.File;
@@ -19,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,11 +37,10 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private SurfaceView surfview;
     private SurfaceHolder surfaceHolder;
     private Button picButton;
-
-
-    List<Camera.Size> mCameraSizes;
-    Camera.Size optimalSize;
-
+    private Button galeryButton;
+    public  String completeCameraFolderPic;
+    Bitmap thumbImage;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         setCameraDisplayOrientation(CameraActivity.this, findFrontFacingCameraID(), mCamera);
-        picButton = (Button) findViewById(R.id.camera_button);
+        picButton = (Button)findViewById(R.id.camera_take_photo_btn);
+        galeryButton=(Button)findViewById(R.id.camera_galery_thumbnail);
 
         picButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +68,45 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             }
         });
 
-        //// Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imagePath), THUMBSIZE, THUMBSIZE);
+        getFirstThumbnail();
         // thumbnail for the library in left botom corner
 
+    }
+
+    public void getFirstThumbnail(){
+
+        ArrayList<String> paths = new ArrayList<>();// list of file paths
+        File[] listFile;
+
+        File file= new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "MyCameraApp");
+
+        if (file.isDirectory())
+        {
+            listFile = file.listFiles();
+
+
+            for (int i = 0; i < listFile.length; i++)
+            {
+
+                paths.add(listFile[i].getAbsolutePath());
+
+            }
+        }
+
+        if (paths != null && !paths.isEmpty()) {
+            String pathtoLastPic= paths.get(paths.size()-1);
+            thumbImage= ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(pathtoLastPic), 60, 60);
+        }
+
+        if (thumbImage!=null){
+
+            Drawable d = new BitmapDrawable(getResources(),thumbImage);
+
+            galeryButton.setBackgroundDrawable(d);
+
+
+        }
     }
 
 
@@ -80,6 +121,17 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 FileOutputStream fos = new FileOutputStream(pictureFile);
                 fos.write(data);
                 fos.close();
+                thumbImage= ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(completeCameraFolderPic), 60, 60);
+                mCamera.startPreview();
+                if (thumbImage!=null){
+
+                    Drawable d = new BitmapDrawable(getResources(),thumbImage);
+
+                    galeryButton.setBackgroundDrawable(d);
+
+
+                }
+
             } catch (FileNotFoundException e) {
 
             } catch (IOException e) {
@@ -87,7 +139,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         }
     };
 
-    private static File getOutputMediaFile() {
+
+
+    private  File getOutputMediaFile() {
         File mediaStorageDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -104,6 +158,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         File mediaFile;
         mediaFile = new File(mediaStorageDir.getPath() + File.separator
                 + "IMG_" + timeStamp + ".jpg");
+
+        completeCameraFolderPic  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + "/" + "MyCameraApp"+"/"+"IMG_"+timeStamp+".jpg";
+
 
         return mediaFile;
     }
