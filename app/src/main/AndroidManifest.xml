@@ -21,15 +21,22 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".weather_widget" >
+        <receiver android:name=".battery_widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.battery.action.UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/weather_widget_info" />
+                android:resource="@xml/battery_widget_info" />
         </receiver>
+
+        <service
+            android:name="com.corporation.tvm.services.MonitorScreenService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>
