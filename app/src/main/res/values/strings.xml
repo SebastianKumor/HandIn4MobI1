@@ -1,22 +1,12 @@
 <resources>
-    <string name="app_name">HandIn4Camera</string>
+    <string name="app_name">Geo gallery</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_main_menu_drawer">MainMenuDrawer</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
-
-<!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_camera">CameraActivity</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="title_activity_camera">Camera</string>
+    <string name="appwidget_text">Battery status</string>
     <string name="add_widget">Add widget</string>
+    <string name="title_activity_gallery_act">Gallery</string>
+    <string name="title_activity_edit_image">Edit image</string>
 </resources>
