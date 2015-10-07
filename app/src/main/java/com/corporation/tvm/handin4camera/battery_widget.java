@@ -25,7 +25,7 @@ public class battery_widget extends AppWidgetProvider {
 
     private static final String ACTION_BATTERY_UPDATE = "android.appwidget.battery.action.UPDATE";
     private int batteryLevel = 0;
-    private int timeEstimate = 0;
+    private double timeEstimate = 0;
     ArrayList<Integer> consumption;
     //double[] consumption;
 
@@ -45,7 +45,8 @@ public class battery_widget extends AppWidgetProvider {
 
             // Get average consumption
             int avg = getAvgConsumption();
-            timeEstimate = getCountOfIntervalsTilDepletion(avg, batteryLevel)*5;
+            // Multiplies 'expected count of 2.5 minute intervals until battery is 0' with '2.5 min' to get the time estimate
+            timeEstimate = getCountOfIntervalsTilDepletion(avg, batteryLevel)*2.5;
         }
         updateViews(context);
     }
@@ -75,7 +76,7 @@ public class battery_widget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         if (turnOn) { // Add extra 1 sec because sometimes ACTION_BATTERY_CHANGED is called after the first alarm
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000, 300 * 1000, pendingIntent);
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000, 150 * 1000, pendingIntent);
         } else {
             alarmManager.cancel(pendingIntent);
         }
@@ -127,7 +128,7 @@ public class battery_widget extends AppWidgetProvider {
     public int getCountOfIntervalsTilDepletion(int avg, int batteryLevel) {
         double tempBatteryLevel = batteryLevel;
         int count = 0;
-        while (tempBatteryLevel <= 0)
+        while (tempBatteryLevel > 0)
         {
             tempBatteryLevel = tempBatteryLevel - avg;
             count++;
