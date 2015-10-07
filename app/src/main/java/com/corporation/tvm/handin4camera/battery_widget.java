@@ -25,9 +25,7 @@ public class battery_widget extends AppWidgetProvider {
 
     private static final String ACTION_BATTERY_UPDATE = "android.appwidget.battery.action.UPDATE";
     private int batteryLevel = 0;
-    private double timeEstimate = 0;
-    ArrayList<Integer> consumption;
-    //double[] consumption;
+
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -37,16 +35,11 @@ public class battery_widget extends AppWidgetProvider {
         int currentLevel = calculateBatteryLevel(context);
         if (batteryChanged(currentLevel)) {
             //      add current consumption for  5 minutes into array
-            if(consumption == null)
-                consumption = new ArrayList<Integer>();
-            consumption.add(batteryLevel - currentLevel);
+
 
             batteryLevel = currentLevel;
 
-            // Get average consumption
-            int avg = getAvgConsumption();
-            // Multiplies 'expected count of 2.5 minute intervals until battery is 0' with '2.5 min' to get the time estimate
-            timeEstimate = getCountOfIntervalsTilDepletion(avg, batteryLevel)*2.5;
+
         }
         updateViews(context);
     }
@@ -76,8 +69,7 @@ public class battery_widget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         if (turnOn) { // Add extra 1 sec because sometimes ACTION_BATTERY_CHANGED is called after the first alarm
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000, 150 * 1000, pendingIntent);
-        } else {
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60 * 1000, pendingIntent);        } else {
             alarmManager.cancel(pendingIntent);
         }
     }
@@ -93,11 +85,7 @@ public class battery_widget extends AppWidgetProvider {
     private void updateViews(Context context) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.battery_widget);
         views.setTextViewText(R.id.batteryText, batteryLevel + "%");
-        if(timeEstimate == 0)
-            views.setTextViewText(R.id.timeEstimate, "?? min left");
-        else
-            views.setTextViewText(R.id.timeEstimate, timeEstimate + " min left");
-        views.setProgressBar(R.id.batteryProgress, 100, batteryLevel, false);
+
 
         ComponentName componentName = new ComponentName(context, battery_widget.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -117,23 +105,23 @@ public class battery_widget extends AppWidgetProvider {
         }
     }
 
-    public int getAvgConsumption() {
-        int allConsumptions = 0;
-        for(int i=0;i<consumption.size();i++) {
-            allConsumptions += consumption.get(i);
-        }
-        return allConsumptions/consumption.size();
-    }
-
-    public int getCountOfIntervalsTilDepletion(int avg, int batteryLevel) {
-        double tempBatteryLevel = batteryLevel;
-        int count = 0;
-        while (tempBatteryLevel > 0)
-        {
-            tempBatteryLevel = tempBatteryLevel - avg;
-            count++;
-        }
-        return count;
-    }
+//    public int getAvgConsumption() {
+//        int allConsumptions = 0;
+//        for(int i=0;i<consumption.size();i++) {
+//            allConsumptions += consumption.get(i);
+//        }
+//        return allConsumptions/consumption.size();
+//    }
+//
+//    public int getCountOfIntervalsTilDepletion(int avg, int batteryLevel) {
+//        double tempBatteryLevel = batteryLevel;
+//        int count = 0;
+//        while (tempBatteryLevel > 0)
+//        {
+//            tempBatteryLevel = tempBatteryLevel - avg;
+//            count++;
+//        }
+//        return count;
+//    }
 }
 
