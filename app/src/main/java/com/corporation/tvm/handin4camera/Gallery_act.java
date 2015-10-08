@@ -57,7 +57,7 @@ public class Gallery_act extends AppCompatActivity {
                     .getColumnIndex(MediaStore.Images.Media.DATA);
             thumbnails[i] = MediaStore.Images.Thumbnails.getThumbnail(
                     getApplicationContext().getContentResolver(), id,
-                    MediaStore.Images.Thumbnails.MINI_KIND, null);
+                    MediaStore.Images.Thumbnails.MICRO_KIND, null);
             arrPath[i] = imagecursor.getString(dataColumnIndex);
         }
         GridView imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
