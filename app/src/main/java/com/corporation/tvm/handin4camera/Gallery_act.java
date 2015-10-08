@@ -40,11 +40,16 @@ public class Gallery_act extends AppCompatActivity {
         super.onStart();
 
         final String[] columns = { MediaStore.Images.Media.DATA,
-                MediaStore.Images.Media._ID };
+                MediaStore.Images.Media._ID};
         final String orderBy = MediaStore.Images.Media._ID;
+
+        Uri mImageUri =MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Cursor imagecursor = getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
-                null, orderBy);
+                mImageUri,
+                columns,
+                MediaStore.Images.Media.DATA + " like ? ",
+                new String[] {"%/MyCameraApp/%"},
+                null);
         int image_column_index = imagecursor
                 .getColumnIndex(MediaStore.Images.Media._ID);
         this.count = imagecursor.getCount();
