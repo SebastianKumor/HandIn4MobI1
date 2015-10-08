@@ -88,7 +88,8 @@ public class Gallery_act extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.map_button:
-                // pootis code here may froind
+                Intent intent2 = new Intent(Gallery_act.this,MapsActivity.class);
+                startActivity(intent2);
                 break;
 
         }
