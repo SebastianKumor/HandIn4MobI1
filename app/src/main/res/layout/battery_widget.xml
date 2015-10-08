@@ -14,26 +14,35 @@
         android:textColor="@android:color/secondary_text_dark"
         android:textSize="18sp" />
 
-    <TextView
-        android:textIsSelectable="false"
-        android:id="@+id/batteryText"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:padding="6dp"
-        android:textColor="@android:color/secondary_text_dark"
-        android:textSize="20sp" />
-
-    <ProgressBar
-        android:id="@+id/batteryProgress"
-        style="?android:attr/progressBarStyleHorizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/batteryHeader"
-        android:layout_centerHorizontal="true"
-        android:max="100"
-        android:progress="80"
-        android:progressDrawable="@drawable/circ_layer" />
+        >
+        <TextView
+            android:textIsSelectable="false"
+            android:id="@+id/batteryText"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:padding="6dp"
+            android:textColor="@android:color/secondary_text_dark"
+            android:textSize="20sp" />
+
+        <ProgressBar
+            android:id="@+id/batteryProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_centerHorizontal="true"
+            android:max="100"
+            android:progress="80"
+            android:progressDrawable="@drawable/circ_layer" />
+
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,9 @@ import android.widget.Button;
 import android.view.View;
 
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
+public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "CameraInfoTag";
 
@@ -41,6 +45,10 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private Button galeryButton;
     public  String completeCameraFolderPic;
     Bitmap thumbImage;
+    private Location mLastLocation;
+    private double mLatitude;
+    private double mLongtitude;
+    private  GoogleApiClient mGoogleApiClient;
     
 
     @Override
@@ -49,6 +57,15 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
 
         setContentView(R.layout.activity_camera);
+
+        buildGoogleApiClient();
+
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (mLastLocation != null) {
+            mLatitude=mLastLocation.getLatitude();
+            mLongtitude=mLastLocation.getLongitude();
+        }
 
 
 
@@ -72,6 +89,14 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         getFirstThumbnail();
          //thumbnail for the library in left botom corner
 
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
     }
 
     public void getFirstThumbnail(){
@@ -123,6 +148,13 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 fos.write(data);
                 fos.close();
                 thumbImage= ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(completeCameraFolderPic), 60, 60);
+/// geting location to be saved with the picture
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                        mGoogleApiClient);
+                if (mLastLocation != null) {
+                    mLatitude=mLastLocation.getLatitude();
+                    mLongtitude=mLastLocation.getLongitude();
+                }
                 mCamera.startPreview();
                 if (thumbImage!=null){
 
@@ -302,6 +334,24 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         refreshCamera();
         mCamera.autoFocus(null);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnectionFailed(com.google.android.gms.common.ConnectionResult connectionResult) {
     }
 
 

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
@@ -18,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MapsActivity extends android.support.v4.app.FragmentActivity implements OnMapReadyCallback,LocationListener,android.location.LocationListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,android.location.LocationListener {
 
     LatLng custom = new LatLng(0,0);
     public LocationListener loclist;

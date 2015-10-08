@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ParentRelativeLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -8,8 +9,33 @@
     android:id="@+id/imageView1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
     android:layout_weight="0.72"
     android:src="@drawable/ic_drawer"
     android:scaleType="fitXY" />
 
+    <LinearLayout
+        android:id="@+id/seconLAyout"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:background="#000000"
+        android:layout_below="@+id/imageView1"
+        android:layout_height="80dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_gravity="top"
+            android:textColor="#ffffff"
+            android:text="Enter the photo desctiption here"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:textColor="#ffffff"
+            />
+
     </LinearLayout>
+
+    </RelativeLayout>
