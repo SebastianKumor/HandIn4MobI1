@@ -26,7 +26,6 @@ public class battery_widget extends AppWidgetProvider {
     private static final String ACTION_BATTERY_UPDATE = "android.appwidget.battery.action.UPDATE";
     private int batteryLevel = 0;
 
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -34,12 +33,7 @@ public class battery_widget extends AppWidgetProvider {
         // Sometimes when the phone is booting, onUpdate method gets called before onEnabled()
         int currentLevel = calculateBatteryLevel(context);
         if (batteryChanged(currentLevel)) {
-            //      add current consumption for  5 minutes into array
-
-
             batteryLevel = currentLevel;
-
-
         }
         updateViews(context);
     }
@@ -69,7 +63,9 @@ public class battery_widget extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         if (turnOn) { // Add extra 1 sec because sometimes ACTION_BATTERY_CHANGED is called after the first alarm
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60 * 1000, pendingIntent);        } else {
+            //update battery info every minute - could drain more battery - in real world app we would probably have to update it less frequently
+            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60 * 1000, pendingIntent);
+        } else {
             alarmManager.cancel(pendingIntent);
         }
     }
@@ -85,7 +81,7 @@ public class battery_widget extends AppWidgetProvider {
     private void updateViews(Context context) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.battery_widget);
         views.setTextViewText(R.id.batteryText, batteryLevel + "%");
-
+        views.setProgressBar(R.id.batteryProgress, 100, batteryLevel, false);
 
         ComponentName componentName = new ComponentName(context, battery_widget.class);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -104,24 +100,5 @@ public class battery_widget extends AppWidgetProvider {
             }
         }
     }
-
-//    public int getAvgConsumption() {
-//        int allConsumptions = 0;
-//        for(int i=0;i<consumption.size();i++) {
-//            allConsumptions += consumption.get(i);
-//        }
-//        return allConsumptions/consumption.size();
-//    }
-//
-//    public int getCountOfIntervalsTilDepletion(int avg, int batteryLevel) {
-//        double tempBatteryLevel = batteryLevel;
-//        int count = 0;
-//        while (tempBatteryLevel > 0)
-//        {
-//            tempBatteryLevel = tempBatteryLevel - avg;
-//            count++;
-//        }
-//        return count;
-//    }
 }
 
