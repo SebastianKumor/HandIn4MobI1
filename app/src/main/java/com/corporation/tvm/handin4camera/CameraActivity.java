@@ -2,6 +2,7 @@ package com.corporation.tvm.handin4camera;
 
 
 import android.graphics.Bitmap;
+//import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -69,7 +70,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         });
 
         getFirstThumbnail();
-        // thumbnail for the library in left botom corner
+         //thumbnail for the library in left botom corner
 
     }
 
@@ -300,6 +301,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         refreshCamera();
+        mCamera.autoFocus(null);
     }
 
 

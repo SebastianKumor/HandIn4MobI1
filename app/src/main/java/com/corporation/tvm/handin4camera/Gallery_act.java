@@ -31,6 +31,14 @@ public class Gallery_act extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery_act);
 
+
+    }
+
+    @Override
+    protected void onStart(){
+
+        super.onStart();
+
         final String[] columns = { MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media._ID };
         final String orderBy = MediaStore.Images.Media._ID;
@@ -49,7 +57,7 @@ public class Gallery_act extends AppCompatActivity {
                     .getColumnIndex(MediaStore.Images.Media.DATA);
             thumbnails[i] = MediaStore.Images.Thumbnails.getThumbnail(
                     getApplicationContext().getContentResolver(), id,
-                    MediaStore.Images.Thumbnails.MICRO_KIND, null);
+                    MediaStore.Images.Thumbnails.MINI_KIND, null);
             arrPath[i] = imagecursor.getString(dataColumnIndex);
         }
         GridView imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
@@ -58,6 +66,8 @@ public class Gallery_act extends AppCompatActivity {
         imagegrid.setAdapter(imageAdapter);
         imagecursor.close();
     }
+
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
@@ -74,7 +84,7 @@ public class Gallery_act extends AppCompatActivity {
         {
             case R.id.camera_button:
 
-                Intent intent = new Intent(Gallery_act.this,EditImageAct.class);
+                Intent intent = new Intent(Gallery_act.this,CameraActivity.class);
                 startActivity(intent);
                 break;
             case R.id.map_button:
