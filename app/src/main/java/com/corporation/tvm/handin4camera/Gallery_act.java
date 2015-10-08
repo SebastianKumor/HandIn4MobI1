@@ -37,7 +37,8 @@ public class Gallery_act extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery_act);
 
-
+        dbsHelper = new DatabaseHelper(getApplication().getApplicationContext());
+        dbs = dbsHelper.getWritableDatabase();
     }
 
     @Override
@@ -76,10 +77,6 @@ public class Gallery_act extends AppCompatActivity {
         imageAdapter = new ImageAdapter();
         imagegrid.setAdapter(imageAdapter);
         imagecursor.close();
-
-
-        dbsHelper = new DatabaseHelper(getApplication().getApplicationContext());
-        dbs = dbsHelper.getWritableDatabase();
     }
 
 

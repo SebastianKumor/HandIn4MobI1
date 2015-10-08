@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String GALLERY_TABLE_NAME = "gallery";
     private static final String GALLERY_TABLE_CREATE =
-            "CREATE TABLE IF NOT EXISTS " + GALLERY_TABLE_NAME + " (name VARCHAR, lat DOUBLE, long DOUBLE, description VARCHAR, id INTEGER PRIMARY KEY);";
+            "CREATE TABLE IF NOT EXISTS " + GALLERY_TABLE_NAME + " (name VARCHAR, lat DOUBLE, lng DOUBLE, description VARCHAR, id INTEGER PRIMARY KEY);";
 
     public DatabaseHelper(Context context) {
         super(context, "Gallery", null, DATABASE_VERSION);

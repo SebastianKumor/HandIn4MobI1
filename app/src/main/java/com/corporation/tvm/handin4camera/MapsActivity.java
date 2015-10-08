@@ -3,13 +3,17 @@ package com.corporation.tvm.handin4camera;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.corporation.tvm.helpers.DatabaseHelper;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +21,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.lang.reflect.Array;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,LocationListener,android.location.LocationListener {
@@ -27,6 +33,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Location loc;
     public double latitude;
     public double longitude;
+    DatabaseHelper dbsHelper;
+    SQLiteDatabase dbs;
+    LatLng[] markers = new LatLng[0];
 
 
     @Override
@@ -39,12 +48,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         String context = Context.LOCATION_SERVICE;
         locationManager = (LocationManager)getSystemService(context);
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "GPS is Enabled in your device", Toast.LENGTH_SHORT).show();
         }else{
             buildAlertMessageNoGps();
         }
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            Toast.makeText(this, "Network is Enabled in your devide", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Network is Enabled in your device", Toast.LENGTH_SHORT).show();
         }else{
             buildAlertMessageNoGps();
         }
@@ -56,7 +65,36 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             se.printStackTrace();
         }
         mapFragment.getMapAsync(this);
+
+        dbsHelper = new DatabaseHelper(getApplication().getApplicationContext());
+        dbs = dbsHelper.getReadableDatabase();
+
+        getPicsLatLng();
     }
+
+    public void getPicsLatLng()
+    {
+        try {
+            Cursor c = dbs.rawQuery("SELECT * FROM gallery", null);
+
+            int latIndex = c.getColumnIndex("lat");
+            int lngIndex = c.getColumnIndex("lng");
+            c.moveToFirst();
+
+            int i = 0;
+            while (c != null) {
+                Log.i("Results - lat", Double.toString(c.getDouble(latIndex)));
+                Log.i("Results - lng", Double.toString(c.getDouble(lngIndex)));
+                c.moveToNext();
+                markers[i] = new LatLng(c.getDouble(latIndex), c.getDouble(lngIndex));
+                i++;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap map) {
         String context = Context.LOCATION_SERVICE;
@@ -79,6 +117,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             else {
                 custom = new LatLng(latitude, longitude);
+                map.addMarker(new MarkerOptions().position(custom).title("Marker in Custom"));
+                map.moveCamera(CameraUpdateFactory.newLatLng(custom));
+            }
+            for(int i = 0; i < markers.length; i++)
+            {
+                custom = new LatLng(markers[i].latitude, markers[i].longitude);
                 map.addMarker(new MarkerOptions().position(custom).title("Marker in Custom"));
                 map.moveCamera(CameraUpdateFactory.newLatLng(custom));
             }
@@ -115,6 +159,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         map.moveCamera(CameraUpdateFactory.newLatLng(custom));
                     } else {
                         custom = new LatLng(latitude, longitude);
+                        map.addMarker(new MarkerOptions().position(custom).title("Marker in Custom"));
+                        map.moveCamera(CameraUpdateFactory.newLatLng(custom));
+                    }
+                    for(int i = 0; i < markers.length; i++)
+                    {
+                        custom = new LatLng(markers[i].latitude, markers[i].longitude);
                         map.addMarker(new MarkerOptions().position(custom).title("Marker in Custom"));
                         map.moveCamera(CameraUpdateFactory.newLatLng(custom));
                     }

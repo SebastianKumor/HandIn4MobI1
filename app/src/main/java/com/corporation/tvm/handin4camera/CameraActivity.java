@@ -1,6 +1,7 @@
 package com.corporation.tvm.handin4camera;
 
 
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 //import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.view.View;
 
 
+import com.corporation.tvm.helpers.DatabaseHelper;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -49,6 +51,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private double mLatitude;
     private double mLongtitude;
     private  GoogleApiClient mGoogleApiClient;
+    DatabaseHelper dbsHelper;
+    SQLiteDatabase dbs;
     
 
     @Override
@@ -89,6 +93,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         getFirstThumbnail();
          //thumbnail for the library in left botom corner
 
+
+        dbsHelper = new DatabaseHelper(getApplication().getApplicationContext());
+        dbs = dbsHelper.getWritableDatabase();
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -148,13 +155,14 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 fos.write(data);
                 fos.close();
                 thumbImage= ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(completeCameraFolderPic), 60, 60);
-/// geting location to be saved with the picture
+/// getting location to be saved with the picture
                 mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                         mGoogleApiClient);
                 if (mLastLocation != null) {
                     mLatitude=mLastLocation.getLatitude();
                     mLongtitude=mLastLocation.getLongitude();
                 }
+                dbs.execSQL("INSERT INTO gallery (lat, lng, description) VALUES (mLatitude, mLongtitude, '')");
                 mCamera.startPreview();
                 if (thumbImage!=null){
 
