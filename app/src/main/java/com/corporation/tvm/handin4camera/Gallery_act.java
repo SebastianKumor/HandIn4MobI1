@@ -3,11 +3,14 @@ package com.corporation.tvm.handin4camera;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,13 +21,16 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.corporation.tvm.helpers.DatabaseHelper;
+
 public class Gallery_act extends AppCompatActivity {
     private int count;
     private Bitmap[] thumbnails;
     private String[] arrPath;
     private ImageAdapter imageAdapter;
 
-
+    DatabaseHelper dbsHelper;
+    SQLiteDatabase dbs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,15 +63,16 @@ public class Gallery_act extends AppCompatActivity {
         imageAdapter = new ImageAdapter();
         imagegrid.setAdapter(imageAdapter);
         imagecursor.close();
+
+
+        dbsHelper = new DatabaseHelper(getApplication().getApplicationContext());
+        dbs = dbsHelper.getWritableDatabase();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.main_menu_drawer, menu);
-
-
         return true;
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
